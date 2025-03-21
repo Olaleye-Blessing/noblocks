@@ -12,6 +12,7 @@ import {
   formatNumberWithCommas,
   getGatewayContractAddress,
   getInstitutionNameByCode,
+  getRpcUrl,
   publicKeyEncrypt,
 } from "../utils";
 import { useNetwork } from "../context/NetworksContext";
@@ -36,6 +37,7 @@ import { fetchAggregatorPublicKey } from "../api/aggregator";
 import { trackEvent } from "../hooks/analytics";
 import { ImSpinner } from "react-icons/im";
 import { InformationSquareIcon } from "hugeicons-react";
+import { bsc } from "viem/chains";
 
 /**
  * Renders a preview of a transaction with the provided details.
@@ -162,6 +164,7 @@ export const TransactionPreview = ({
   const createOrder = async () => {
     try {
       if (isInjectedWallet && injectedProvider) {
+        // Injected wallet
         if (!injectedReady) {
           throw new Error("Injected wallet not ready");
         }
@@ -193,7 +196,7 @@ export const TransactionPreview = ({
         try {
           const publicClient = createPublicClient({
             chain: selectedNetwork.chain,
-            transport: http(),
+            transport: http(getRpcUrl(selectedNetwork.chain.name)),
           });
 
           await publicClient.waitForTransactionReceipt({
@@ -231,6 +234,7 @@ export const TransactionPreview = ({
           ],
         });
       } else {
+        // Smart wallet
         if (!client) {
           throw new Error("Smart wallet not found");
         }
@@ -335,7 +339,7 @@ export const TransactionPreview = ({
     const getOrderCreatedLogs = async () => {
       const publicClient = createPublicClient({
         chain: selectedNetwork.chain,
-        transport: http(),
+        transport: http(getRpcUrl(selectedNetwork.chain.name)),
       });
 
       if (!publicClient || !activeWallet?.address || isOrderCreatedLogsFetched)
@@ -428,7 +432,7 @@ export const TransactionPreview = ({
             <p className="flex flex-grow items-center gap-1 font-medium text-text-body dark:text-white/80">
               {(key === "amount" || key === "fee") && (
                 <Image
-                  src={`/logos/${String(token)?.toLowerCase()}-logo.${token === 'cNGN' ? 'png' : 'svg'}`}
+                  src={`/logos/${String(token)?.toLowerCase()}-logo.${token === "cNGN" ? "png" : "svg"}`}
                   alt={`${token} logo`}
                   width={14}
                   height={14}

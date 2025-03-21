@@ -131,6 +131,22 @@ export const getExplorerLink = (network: string, txHash: string) => {
   }
 };
 
+// write function to get rpc url for a given network
+export function getRpcUrl(network: string) {
+  switch (network) {
+    case "Polygon":
+      return `https://rpc.shield3.com/v3/0x89/${process.env.NEXT_PUBLIC_SHIELD3_API_KEY}/rpc`;
+    case "BNB Smart Chain":
+      return `https://rpc.shield3.com/v3/0x38/${process.env.NEXT_PUBLIC_SHIELD3_API_KEY}/rpc`;
+    case "Base":
+      return `https://rpc.shield3.com/v3/0x2105/${process.env.NEXT_PUBLIC_SHIELD3_API_KEY}/rpc`;
+    case "Arbitrum One":
+      return `https://rpc.shield3.com/v3/0xa4b1/${process.env.NEXT_PUBLIC_SHIELD3_API_KEY}/rpc`;
+    default:
+      return undefined;
+  }
+}
+
 /**
  * Fetches the supported tokens for the specified network.
  *
@@ -153,7 +169,7 @@ export function fetchSupportedTokens(network = ""): Token[] | undefined {
         name: "cNGN",
         symbol: "cNGN",
         decimals: 6,
-        address: "0x46C85152bFe9f96829aA94755D9f915F9B10EF5F",
+        address: "0x46c85152bfe9f96829aa94755d9f915f9b10ef5f",
         imageUrl: "/logos/cngn-logo.png",
       },
       {
@@ -200,7 +216,7 @@ export function fetchSupportedTokens(network = ""): Token[] | undefined {
         name: "cNGN",
         symbol: "cNGN",
         decimals: 6,
-        address: "0xa8AEA66B361a8d53e8865c62D142167Af28Af058",
+        address: "0xa8aea66b361a8d53e8865c62d142167af28af058",
         imageUrl: "/logos/cngn-logo.png",
       },
     ],
@@ -223,7 +239,7 @@ export function fetchSupportedTokens(network = ""): Token[] | undefined {
         name: "cNGN",
         symbol: "cNGN",
         decimals: 6,
-        address: "0x52828daa48C1a9A06F37500882b42daf0bE04C3B",
+        address: "0x52828daa48c1a9a06f37500882b42daf0be04c3b",
         imageUrl: "/logos/cngn-logo.png",
       },
     ],

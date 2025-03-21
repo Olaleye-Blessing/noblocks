@@ -83,8 +83,14 @@ export const TransactionForm = ({
   const handleFundWalletClick = async (
     amount: string,
     tokenAddress: `0x${string}`,
+    onComplete?: (success: boolean) => void,
   ) => {
-    await handleFundWallet(activeWallet?.address ?? "", amount, tokenAddress);
+    await handleFundWallet(
+      activeWallet?.address ?? "",
+      amount,
+      tokenAddress,
+      onComplete,
+    );
   };
 
   const fetchedTokens: Token[] =
@@ -97,7 +103,8 @@ export const TransactionForm = ({
 
   const handleBalanceMaxClick = () => {
     if (balance > 0) {
-      setValue("amountSent", balance, { shouldValidate: true });
+      const maxAmount = balance.toFixed(4);
+      setValue("amountSent", parseFloat(maxAmount), { shouldValidate: true });
       setIsReceiveInputActive(false);
     }
   };
@@ -116,9 +123,10 @@ export const TransactionForm = ({
     // Add commas to the integer part
     const integerPart = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-    // Preserve the decimal part if it exists
+    // Preserve the decimal part if it exists, ensuring max 4 decimal places
     if (parts.length > 1) {
-      return `${integerPart}.${parts[1]}`;
+      const decimalPart = parts[1].slice(0, 4); // Limit to 4 decimal places
+      return `${integerPart}.${decimalPart}`;
     }
 
     return integerPart;
